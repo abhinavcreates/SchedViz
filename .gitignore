@@ -1,0 +1,30 @@
+# Engine binary (compiled output)
+engine/bin/
+engine/include/json.hpp
+
+# Environment variables — NEVER commit .env
+server/.env
+
+# Node.js dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# React build output
+client/dist/
+client/.vite/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
