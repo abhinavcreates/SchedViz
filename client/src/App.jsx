@@ -7,7 +7,6 @@ import MemoryManagement from './pages/MemoryManagement';
 import History from './pages/History';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
 export default function App() {
   return (
     <div className="min-h-screen bg-base text-text-primary">

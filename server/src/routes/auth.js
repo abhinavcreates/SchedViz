@@ -29,8 +29,10 @@ router.post('/signup', async (req, res) => {
     
     res.status(201).json({ token, user: { id: user._id, email: user.email } });
   } catch (err) {
+    console.error('SIGNUP ERROR:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+  
 });
 
 /**
@@ -56,6 +58,7 @@ router.post('/login', async (req, res) => {
     
     res.json({ token, user: { id: user._id, email: user.email } });
   } catch (err) {
+    console.error('LOGIN ERROR:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

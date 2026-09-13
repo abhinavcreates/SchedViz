@@ -53,6 +53,10 @@ router.post('/cpu', async (req, res) => {
     if (!Array.isArray(processes) || processes.length === 0) {
       return res.status(400).json({ error: 'Processes must be a non-empty array' });
     }
+
+    if (processes.length > 20) {
+      return res.status(400).json({ error: 'Maximum 20 processes allowed per simulation' });
+    }
     
     for (const p of processes) {
       if (typeof p.id !== 'string' || p.id.trim() === '') {
@@ -82,7 +86,8 @@ router.post('/cpu', async (req, res) => {
     
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[SchedViz] CPU simulation error:', err.message);
+    res.status(500).json({ error: 'Simulation failed. Please check your inputs and try again.' });
   }
 });
 
@@ -104,6 +109,14 @@ router.post('/memory', async (req, res) => {
     if (!Array.isArray(blocks) || blocks.length === 0 || !Array.isArray(processes) || processes.length === 0) {
       return res.status(400).json({ error: 'Blocks and processes must be non-empty arrays' });
     }
+
+    // Cap input sizes to prevent long-running engine subprocesses
+    if (processes.length > 20) {
+      return res.status(400).json({ error: 'Maximum 20 processes allowed per simulation' });
+    }
+    if (blocks.length > 50) {
+      return res.status(400).json({ error: 'Maximum 50 memory blocks allowed per simulation' });
+    }
     
     const payload = { module: 'memory', algorithm, blocks, processes };
     const result = await runEngine(payload);
@@ -114,7 +127,9 @@ router.post('/memory', async (req, res) => {
     
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // Log full error internally; never send internal details (binary paths, C++ exceptions) to client
+    console.error('[SchedViz] Memory simulation error:', err.message);
+    res.status(500).json({ error: 'Simulation failed. Please check your inputs and try again.' });
   }
 });
 
@@ -136,9 +151,18 @@ router.post('/page', async (req, res) => {
     if (!Number.isInteger(frames) || frames <= 0) {
       return res.status(400).json({ error: 'Frames must be a positive integer' });
     }
+
+    if (frames > 20) {
+      return res.status(400).json({ error: 'Maximum 20 frames allowed' });
+    }
     
     if (!Array.isArray(referenceString) || referenceString.length === 0) {
       return res.status(400).json({ error: 'Reference string must be a non-empty array' });
+    }
+
+    // Cap reference string length to prevent extremely long C++ simulations
+    if (referenceString.length > 100) {
+      return res.status(400).json({ error: 'Reference string must not exceed 100 page references' });
     }
     
     const payload = { module: 'page', algorithm, frames, referenceString };
@@ -150,7 +174,8 @@ router.post('/page', async (req, res) => {
     
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[SchedViz] Page simulation error:', err.message);
+    res.status(500).json({ error: 'Simulation failed. Please check your inputs and try again.' });
   }
 });
 

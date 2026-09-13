@@ -85,8 +85,9 @@ export default function ProcessForm({ algorithm, onSubmit, loading }) {
 
       {error && <div className="text-error text-sm">{error}</div>}
 
-      <div className="border border-border">
-        <table className="w-full text-left text-sm">
+      {/* overflow-x-auto: table scrolls within its container on narrow screens */}
+      <div className="border border-border overflow-x-auto">
+        <table className="w-full text-left text-sm" style={{ minWidth: '360px' }}>
           <thead className="bg-surface text-accent">
             <tr>
               <th className="p-2 border-b border-border">Process ID</th>

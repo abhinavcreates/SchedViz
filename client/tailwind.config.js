@@ -9,6 +9,11 @@ export default {
         border: '#333333',
         accent: '#e07a3f',
         'accent-hover': '#c96a30',
+        // Teal accent — used exclusively in the Memory Management section
+        // to give it a visually distinct identity from the CPU (orange) section
+        teal: '#2dd4bf',
+        'teal-hover': '#1fb2a0',
+        'teal-dim': 'rgba(45,212,191,0.12)', // low-opacity tint for backgrounds
         'text-primary': '#f5f0e8',
         'text-muted': '#9a9080',
         error: '#e05252',
